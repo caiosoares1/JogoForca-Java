@@ -17,27 +17,20 @@ public class JogoDaForca {
 	private String palavraAdivinhada;
 	private StringBuilder palavraAdivinhadaBuilder = new StringBuilder();
 	private int acertos = 0;
-	private boolean resultado;
+	private String resultado;
 	
 	public JogoDaForca() throws Exception{
-		//abrir arquivo palavras.txt da pasta interna "/dados" para leitura
 		InputStream stream = this.getClass().getResourceAsStream("/dados/palavras.txt");
 		if (stream == null)
 			throw new Exception("Arquivo de palavras inexistente");
 		Scanner arquivo = new Scanner(stream);
-		//---Scanner arquivo = new Scanner(new File("c:/palavras.txt")); //abrir arquivo externo do S.O.
-	
-		// leitura das linhas do arquivo para as respectivas listas
 		String linha;
 		while (arquivo.hasNext()) {
 			linha = arquivo.nextLine().toUpperCase();
-			//System.out.println(linha);
 			this.palavras.add(linha.split(";")[0]);
 			this.dicas.add(linha.split(";")[1]);
 		}
 		arquivo.close();
-		/*System.out.println(palavras);
-		System.out.println(dicas);*/
 	}
 	
 	public void iniciar() {
@@ -107,14 +100,11 @@ public class JogoDaForca {
 	    palavraAdivinhada = palavraAdivinhadaBuilder.toString();
 	    return ocorrencias;
 	}
-
-
 	
 	public boolean terminou() {
 	    return palavraAdivinhada.equals(palavraSorteada) || getNumeroPenalidade() >= MAX_PENALIDADES;
 	}
 
-	
 	public String getPalavraAdivinhada() {
 		return palavraAdivinhada.toString();
 	}
@@ -149,20 +139,12 @@ public class JogoDaForca {
 	
 	public String getResultado() {
 		if (acertos == tamanho) {
-	        return "Você ganhou!";
+			resultado = "Você ganhou!";
 	    } else if (getNumeroPenalidade() >= MAX_PENALIDADES) {
-	        return "Você perdeu!";
+	    	resultado = "Você perdeu!";
 	    } else {
-	        return "Em andamento";
+	    	resultado = "Em andamento";
 	    }
+		return resultado;
 	}
-	
-	
-	
-	/*public static void main(String[] args) {
-		System.out.println("asekao");
-		System.out.println();
-	}*/
-	
 }
-
