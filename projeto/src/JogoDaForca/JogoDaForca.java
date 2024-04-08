@@ -11,9 +11,12 @@ public class JogoDaForca {
 	private int numPenalidades = 0;
 	private ArrayList<String> palavras = new ArrayList<>();
 	private ArrayList<String> dicas = new ArrayList<>();
+	ArrayList<String> letrasErradas = new ArrayList<>();
+	private String palavraSorteada = "";
 	private int tamanho;
 	private String palavraAdivinhada;
-	private int acertos;
+	private StringBuilder palavraAdivinhadaBuilder = new StringBuilder();
+	private int acertos = 0;
 	private boolean resultado;
 	
 	public JogoDaForca() throws Exception{
@@ -33,50 +36,86 @@ public class JogoDaForca {
 			this.dicas.add(linha.split(";")[1]);
 		}
 		arquivo.close();
-		System.out.println(palavras);
-		System.out.println(dicas);
+		/*System.out.println(palavras);
+		System.out.println(dicas);*/
 	}
 	
 	public void iniciar() {
 		Random rand = new Random();
 		int indexSorteado = rand.nextInt(palavras.size());
-		String palavraSorteada = palavras.get(indexSorteado);
+		palavraSorteada = palavras.get(indexSorteado);
+		tamanho = palavraSorteada.length();
+		for (int i = 0; i < tamanho; i++) {
+			palavraAdivinhadaBuilder.append("*");
+		}
+		palavraAdivinhada = palavraAdivinhadaBuilder.toString();
 		System.out.println(palavraSorteada);
+		System.out.println(palavraAdivinhada);
 	}
 	
 	public String getDica() {
-		return dicas.get(palavras.indexOf(palavraAdivinhada));
+	    if (palavras.contains(palavraSorteada)) {
+	        int index = palavras.indexOf(palavraSorteada);
+	        return dicas.get(index);
+	    } else {
+	        return "Palavra sorteada não encontrada na lista de palavras.";
+	    }
 	}
+
 	
 	public int getTamanho() {
+		tamanho = palavraSorteada.length();
 		return tamanho;
 	}
 	
 	public ArrayList<Integer> getOcorrencias(String letra) throws Exception {
-		ArrayList<Integer> ocorrencias = new ArrayList<>();
-		for (int i = 0; i < palavraAdivinhada.length(); i++) {
-			if (palavraAdivinhada.charAt(i) == letra.charAt(0)) {
-				ocorrencias.add(i);
-			}
-		}
-		return ocorrencias;
+		letra = letra.toUpperCase();
+		
+	    if (letra == null || letra.isEmpty()) {
+	        throw new IllegalArgumentException("A letra fornecida não pode ser nula ou vazia.");
+	    }
+	    if (letra.length()!=1) {
+	    	throw new Exception("Digite apenas uma letra.");
+	    }
+	    if (palavraAdivinhada.contains(letra)) {
+	    	throw new Exception("A letra já foi digitada.");
+	    }
+	    if (letrasErradas.contains(letra)) {
+	        throw new Exception("Você já digitou essa letra.");
+	    }
+	    if (palavraSorteada == null) {
+	        throw new IllegalStateException("A palavra a ser adivinhada não foi definida.");
+	    }
+	    
+
+	    ArrayList<Integer> ocorrencias = new ArrayList<>();
+	    for (int i = 0; i < palavraSorteada.length(); i++) {
+	        if (palavraSorteada.charAt(i) == letra.charAt(0)) {
+	            ocorrencias.add(i);
+	         
+	            palavraAdivinhadaBuilder.setCharAt(i, letra.charAt(0));
+	            acertos++; 
+	        } 
+	    }
+	   
+	    if (ocorrencias.isEmpty()) {
+	    	letrasErradas.add(letra);
+	        numPenalidades++;
+	        
+	    }
+	  
+	    palavraAdivinhada = palavraAdivinhadaBuilder.toString();
+	    return ocorrencias;
 	}
+
+
 	
 	public boolean terminou() {
-		return acertos == tamanho || getNumeroPenalidade() >= MAX_PENALIDADES;
+	    return palavraAdivinhada.equals(palavraSorteada) || getNumeroPenalidade() >= MAX_PENALIDADES;
 	}
+
 	
 	public String getPalavraAdivinhada() {
-		StringBuilder palavraAdivinhada = new StringBuilder();
-		for(int i = 0; i < tamanho; i++) {
-			char letra = palavraAdivinhada.charAt(i);
-			if (letra != ' ') {
-				palavraAdivinhada.append(letra);
-	
-			} else {
-				palavraAdivinhada.append("_ ");
-			}
-		}
 		return palavraAdivinhada.toString();
 	}
 	
