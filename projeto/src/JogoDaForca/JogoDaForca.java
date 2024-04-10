@@ -39,7 +39,7 @@ public class JogoDaForca {
 		palavraSorteada = palavras.get(indexSorteado);
 		tamanho = palavraSorteada.length();
 		for (int i = 0; i < tamanho; i++) {
-			palavraAdivinhadaBuilder.append("_");
+			palavraAdivinhadaBuilder.append("*");
 		}
 		palavraAdivinhada = palavraAdivinhadaBuilder.toString();
 		System.out.println(palavraSorteada);
