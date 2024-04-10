@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
-public class AplicacaoGrafica {
+public class TelaJogo {
 
 	private JFrame frame;
 	private JTextField tentativaLetra;
@@ -31,8 +31,11 @@ public class AplicacaoGrafica {
 	private JLabel ErroMsg;
 	private JLabel JogoStatus;
 	private JLabel Penalidade;
+	private JLabel Acertos;
+	private JLabel Tamanho;
 	
 	private JogoDaForca jogo;
+	private JLabel label;
 	
 	
 	/**
@@ -42,7 +45,7 @@ public class AplicacaoGrafica {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AplicacaoGrafica window = new AplicacaoGrafica();
+					TelaJogo window = new TelaJogo();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -55,7 +58,7 @@ public class AplicacaoGrafica {
 	 * Create the application.
 	 * @throws Exception 
 	 */
-	public AplicacaoGrafica() throws Exception {
+	public TelaJogo() throws Exception {
 		
 		initialize();
 	}
@@ -84,6 +87,7 @@ public class AplicacaoGrafica {
 		            jogo = new JogoDaForca();
 		            jogo.iniciar();
 		            String dica = jogo.getDica();
+		            int acertos = jogo.getAcertos();
 		            if (jogo.getResultado().equals("Em andamento")) {
 		                JogoStatus.setText(jogo.getResultado());
 		            } 
@@ -93,6 +97,9 @@ public class AplicacaoGrafica {
 		            Corpo.setIcon(newIcon);
 		            ErroMsg.setText("");
 		            Penalidade.setText("");
+		            Acertos.setText("Acertos = " + acertos);
+		            int tamanho = jogo.getTamanho();
+		            Tamanho.setText("Tamanho da Palavra = " + tamanho);
 		            JogoStatus.setForeground(new Color(0, 0, 0));
 		        } catch (Exception ex) {
 		            ex.printStackTrace();
@@ -124,6 +131,11 @@ public class AplicacaoGrafica {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		        try {
+		        	if (jogo == null) {
+		                ErroMsg.setText("Por favor, inicie o jogo antes de adivinhar.");
+		                return;
+		            }
+		           
 		            ArrayList<Integer> resultado = jogo.getOcorrencias(tentativaLetra.getText());
 		            Palavra.setText("Palavra: " + jogo.getPalavraAdivinhada());
 		            tentativaLetra.setText("");
@@ -132,6 +144,11 @@ public class AplicacaoGrafica {
 		                Corpo.setIcon(newIcon);
 		                ErroMsg.setText("");
 		                Penalidade.setText(jogo.getNomePenalidade());
+		            } else {
+		                // Adivinha bem-sucedida, atualiza o número de acertos
+		                int acertos = jogo.getAcertos();
+		                Acertos.setText("Acertos = " + acertos);
+		                ErroMsg.setText("");
 		            }
 		            if(jogo.getResultado().equals("Você perdeu!")) {
 		            	JogoStatus.setText(jogo.getResultado());
@@ -158,7 +175,7 @@ public class AplicacaoGrafica {
 		
 		ErroMsg = new JLabel("");
 		ErroMsg.setForeground(new Color(255, 0, 0));
-		ErroMsg.setBounds(10, 176, 252, 20);
+		ErroMsg.setBounds(9, 169, 250, 20);
 		frame.getContentPane().add(ErroMsg);
 		
 		JogoStatus = new JLabel("");
@@ -169,5 +186,14 @@ public class AplicacaoGrafica {
 		Penalidade = new JLabel("");
 		Penalidade.setBounds(279, 66, 132, 20);
 		frame.getContentPane().add(Penalidade);
+		
+		Acertos = new JLabel("Acertos = ");
+		ErroMsg.setLabelFor(Acertos);
+		Acertos.setBounds(10, 195, 200, 14);
+		frame.getContentPane().add(Acertos);
+		
+		Tamanho = new JLabel("Tamanho da Palavra = ");
+		Tamanho.setBounds(10, 77, 261, 23);
+		frame.getContentPane().add(Tamanho);
 	}
 }
