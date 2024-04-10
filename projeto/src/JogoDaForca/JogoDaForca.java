@@ -39,7 +39,7 @@ public class JogoDaForca {
 		palavraSorteada = palavras.get(indexSorteado);
 		tamanho = palavraSorteada.length();
 		for (int i = 0; i < tamanho; i++) {
-			palavraAdivinhadaBuilder.append("*");
+			palavraAdivinhadaBuilder.append("_");
 		}
 		palavraAdivinhada = palavraAdivinhadaBuilder.toString();
 		System.out.println(palavraSorteada);
@@ -79,7 +79,7 @@ public class JogoDaForca {
 	    if (palavraSorteada == null) {
 	        throw new IllegalStateException("A palavra a ser adivinhada não foi definida.");
 	    }
-	    
+	    	
 
 	    ArrayList<Integer> ocorrencias = new ArrayList<>();
 	    for (int i = 0; i < palavraSorteada.length(); i++) {
@@ -94,6 +94,7 @@ public class JogoDaForca {
 	    if (ocorrencias.isEmpty()) {
 	    	letrasErradas.add(letra);
 	        numPenalidades++;
+	        
 	        
 	    }
 	  
