@@ -33,11 +33,7 @@ public class TelaJogo {
 	private JLabel Penalidade;
 	private JLabel Acertos;
 	private JLabel Tamanho;
-	
 	private JogoDaForca jogo;
-	private JLabel label;
-	
-	
 	/**
 	 * Launch the application.
 	 */
@@ -90,6 +86,7 @@ public class TelaJogo {
 		            int acertos = jogo.getAcertos();
 		            if (jogo.getResultado().equals("Em andamento")) {
 		                JogoStatus.setText(jogo.getResultado());
+		                AdivinharBtn.setEnabled(true);
 		            } 
 		            Dica.setText("Dica: "+ dica);
 		            Palavra.setText("Palavra: " + jogo.getPalavraAdivinhada());
@@ -127,14 +124,15 @@ public class TelaJogo {
 		frame.getContentPane().add(Palavra);
 		
 		AdivinharBtn = new JButton("Adivinhar");
-		AdivinharBtn.addMouseListener(new MouseAdapter() {
+		AdivinharBtn.addActionListener(new ActionListener() {
 		    @Override
-		    public void mouseClicked(MouseEvent e) {
+		    public void actionPerformed(ActionEvent e) {
 		        try {
 		        	if (jogo == null) {
 		                ErroMsg.setText("Por favor, inicie o jogo antes de adivinhar.");
 		                return;
 		            }
+		        	
 		           
 		            ArrayList<Integer> resultado = jogo.getOcorrencias(tentativaLetra.getText());
 		            Palavra.setText("Palavra: " + jogo.getPalavraAdivinhada());
@@ -153,16 +151,19 @@ public class TelaJogo {
 		            if(jogo.getResultado().equals("Você perdeu!")) {
 		            	JogoStatus.setText(jogo.getResultado());
 		            	JogoStatus.setForeground(new Color(255,0,0));
+		            	AdivinharBtn.setEnabled(false);
 		            }
 		            if(jogo.getResultado().equals("Você ganhou!")) {
 		            	JogoStatus.setText(jogo.getResultado());
 		            	JogoStatus.setForeground(new Color(0,0,255));
+		            	AdivinharBtn.setEnabled(false);
 		            }
 		        } catch (Exception e1) {
 		            ErroMsg.setText(e1.getMessage());
 		        }
 		    }
 		});
+		
 		AdivinharBtn.setBounds(113, 142, 89, 23);
 		frame.getContentPane().add(AdivinharBtn);
 		

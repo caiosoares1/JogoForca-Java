@@ -42,8 +42,6 @@ public class JogoDaForca {
 			palavraAdivinhadaBuilder.append("*");
 		}
 		palavraAdivinhada = palavraAdivinhadaBuilder.toString();
-		System.out.println(palavraSorteada);
-		System.out.println(palavraAdivinhada);
 	}
 	
 	public String getDica() {
